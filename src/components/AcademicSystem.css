@@ -1,0 +1,68 @@
+.academic-system {
+  width: 80%;
+  background-color: #FFFFF0;
+  margin: 40px;
+  border-radius: 30px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.academic-system-cards {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.academic-system-card {
+  width: 25%;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: left;
+  margin: 20px;
+  padding: 15px;
+  background-image: linear-gradient(135deg, #f5f5f5, #f5f5f5);
+  /* 預設灰白底（無顏色狀態） */
+  cursor: pointer;
+  transition: background-image 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s;
+}
+
+.academic-system-card.active {
+  background-image: linear-gradient(135deg, #01FF93, #01E7FF);
+  /* 高亮狀態 */
+  transform: scale(1.04);
+  box-shadow: 0 8px 24px rgba(1, 231, 255, 0.18);
+}
+
+.card-icon {
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.card-desc {
+  font-size: 14px;
+  color: #666;
+}
+
+/* RWD */
+
+@media (max-width: 900px) {
+  .academic-system-cards {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .academic-system-card {
+    width: 80%;
+    margin: 15px 0;
+  }
+}

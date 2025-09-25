@@ -1,0 +1,83 @@
+.prompt {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-image: linear-gradient(145deg, #EF9B0F, #FFBF00);
+    border: 2px solid #A4A4A4;
+    border-radius: 10px;
+    box-shadow: 0px 2px 12px rgba(0,0,0,0.5);
+}
+
+.prompt-functions {
+    width: 100%;
+    margin: 20px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #FFDF80;    
+    border-radius: 15px;
+}
+
+.prompt-function {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.textarea-note {
+    width: 60%;
+    margin-left: 10px;
+    padding: 10px;
+    min-height: 150px;
+    border: 1px solid #FFBF00;
+    border-radius: 5px;
+}
+
+.textarea-result {
+    width: 60%;
+    margin-left: 10px;
+    padding: 10px;
+    min-height: 250px;
+    border: 1px solid #FFBF00;
+    border-radius: 5px;
+}
+
+.textarea-note:hover,
+.textarea-result:hover {
+    box-shadow: 0 2px 8px rgba(255, 215, 79, 0.15);
+    border: 3px solid #FFBF00;;
+}
+
+.textarea-note:focus,
+.textarea-result:focus {
+    box-shadow: 0 2px 8px rgba(255, 215, 79, 0.25);
+    border: 3px solid #EF9B0F;
+    outline: none;
+}
+
+/* button */
+
+.generate-button,
+.copy-button {
+    width: 400px;
+    padding: 10px;
+    align-self: center;
+    background-color: #8B00FF;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.generate-button:hover,
+.copy-button:hover {
+    background-color: #7A00E6;
+}
+
+.generate-button:active,
+.copy-button:active {
+    scale: 0.98;
+}
