@@ -1,0 +1,3 @@
+taiyu-notebookLM-subject.xlsx 中的底色代表有合併該科的乙版
+
+online-volume.xlsx 中的 subjectId 欄位，紅色字代表合併到 subjectId (與原本不同)
