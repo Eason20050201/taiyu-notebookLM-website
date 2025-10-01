@@ -96,6 +96,11 @@
     text-align: left;
 }
 
+.prompt-item {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
 
 .textarea-note {
     width: 100%;

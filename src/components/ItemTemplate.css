@@ -1,0 +1,11 @@
+.item-template {
+    width: 100%;
+    margin: 20px auto;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    background-color: #ccc;    
+    border-radius: 15px;
+    align-items: center;
+}

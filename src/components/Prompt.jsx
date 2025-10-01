@@ -2,6 +2,8 @@ import './Prompt.css'
 import CustomSelect from './CustomSelect'
 
 import { useState } from 'react';
+import ItemSelector from './ItemSelector';
+import ItemTemplate from './ItemTemplate';
 
 function Prompt({ volumes }) {
   const [selectedVolume, setSelectedVolume] = useState(null);
@@ -10,6 +12,7 @@ function Prompt({ volumes }) {
   const [selectedPoints, setSelectedPoints] = useState([]);
   const [expandedChapters, setExpandedChapters] = useState([]); // 控制章展開
   const [expandedSections, setExpandedSections] = useState([]); // 控制節展開
+  const [selectedItem, setSelectedItem] = useState(null);
 
   // 冊次選項
   const volumeOptions = volumes.map((v, idx) => ({ value: idx, label: v.name }));
@@ -41,6 +44,13 @@ function Prompt({ volumes }) {
   const pointOptions = currentSections.length > 0
     ? currentSections.flatMap((sec, secIdx) => sec.points.map((pt, ptIdx) => ({ value: `${selectedSections[secIdx]}-${ptIdx}`, label: pt.name })))
     : [];
+
+  const itemOptions = [
+    { id: 1, title: '教案' },
+    { id: 2, title: '素養題' },
+    { id: 3, title: '快速背課' },
+    { id: 4, title: 'Ai 小助教' },
+  ];
 
   return (
     <div className="prompt">
@@ -190,14 +200,14 @@ function Prompt({ volumes }) {
 
         <div className='prompt-function'>
           <h3>項目</h3>
-          <CustomSelect
-            placeholder="選擇項目"
-            options={[
-              { value: '1', label: '項目 1' },
-              { value: '2', label: '項目 2' },
-            ]}
-            onChange={(val) => console.log("項目選擇:", val)}
-          />
+          <div className='prompt-item'>
+            <ItemSelector
+              items={itemOptions}
+              selectedItem={selectedItem}
+              setSelectedItem={setSelectedItem}
+            />
+            <ItemTemplate selectedItem={selectedItem} />
+          </div>
         </div>
 
         <div className='prompt-function'>
