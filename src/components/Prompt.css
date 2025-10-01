@@ -22,12 +22,15 @@
     background-color: #8B00FF;
 }
 
+
 .prompt-function label {
     background: #fffbe6;
-    border: 1.5px solid #FFBF00;
+    border: 2px solid #FFBF00; /* 固定為2px，hover時不會跳動 */
     border-radius: 8px;
     padding: 2px 10px 2px 4px;
     margin-bottom: 4px;
+    min-height: 28px; /* 給定最小高度，避免內容hover時跳動 */
+    box-sizing: border-box;
     transition: box-shadow 0.2s, border-color 0.2s;
     cursor: pointer;
     display: flex;
@@ -36,7 +39,8 @@
 
 .prompt-function label:hover {
     box-shadow: 0 2px 8px rgba(255, 215, 79, 0.15);
-    border: 2px solid #EF9B0F;
+    border-color: #EF9B0F;
+    scale: 1.03;
     transition: transform 0.15s, box-shadow 0.2s, border-color 0.2s;
 }
 
@@ -85,19 +89,6 @@
     align-self: flex-start;
 }
 
-/* 章節標題在節區塊的強化樣式 */
-.prompt-section-chapter-title {
-    display: inline-block;
-    font-weight: bold;
-    font-size: 1.08em;
-    color: #000;
-    background: linear-gradient(90deg, #01FF93 0%, #01E7FF 100%);
-    border-radius: 8px;
-    padding: 3px 16px 3px 10px;
-    margin: 10px  0px 15px;
-    letter-spacing: 1px;
-    box-shadow: 0 2px 8px rgba(239,155,15,0.10);
-}
 
 .prompt-function > *:not(h3) {
     flex: 1;
