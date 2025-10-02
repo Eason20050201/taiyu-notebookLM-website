@@ -1,3 +1,5 @@
+import './Prompt.css';
+
 import React, { useState } from 'react';
 
 function PromptGenerator({

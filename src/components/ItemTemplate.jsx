@@ -1,4 +1,5 @@
 import "./ItemTemplate.css";
+import CustomSelect from "./CustomSelect";
 
 function ItemTemplate({ selectedItem, itemDetails, setItemDetails }) {
   // 欄位資料結構
@@ -9,8 +10,8 @@ function ItemTemplate({ selectedItem, itemDetails, setItemDetails }) {
       { label: '教具/媒材需求', placeholder: '請輸入教具/媒材需求...' },
     ],
     2: [
-      { label: '題型選擇', placeholder: '請輸入題型...' },
-      { label: '難度設定', placeholder: '請輸入難度...' },
+      { label: '題型選擇', placeholder: '請輸入題型...', options: ['單選題', '多選題', '填充題', '問答題'] },
+      { label: '難度設定', placeholder: '請輸入難度...', options: ['易', '中', '難'] },
       { label: '對應課綱能力指標', placeholder: '請輸入能力指標...' },
       { label: '自動解析', placeholder: '請輸入自動解析...' },
     ],
@@ -59,14 +60,25 @@ function ItemTemplate({ selectedItem, itemDetails, setItemDetails }) {
             onChange={e => handleCheck(field.label, e.target.checked)}
           />
           <h3>{field.label}</h3>
-          <input
-            type="text"
-            className="input-box"
-            placeholder={field.placeholder}
-            value={itemDetails?.[field.label]?.value || ''}
-            onChange={e => handleInput(field.label, e.target.value)}
-            disabled={!itemDetails?.[field.label]?.checked}
-          />
+          {field.options ? (
+            <CustomSelect
+              options={field.options.map(opt => ({ label: opt, value: opt }))}
+              placeholder={field.placeholder}
+              onChange={option => handleInput(field.label, option ? option.value : '')}
+              // 讓 CustomSelect 受控於 itemDetails
+              value={itemDetails?.[field.label]?.value || ''}
+              disabled={!itemDetails?.[field.label]?.checked}
+            />
+          ) : (
+            <input
+              type="text"
+              className="input-box"
+              placeholder={field.placeholder}
+              value={itemDetails?.[field.label]?.value || ''}
+              onChange={e => handleInput(field.label, e.target.value)}
+              disabled={!itemDetails?.[field.label]?.checked}
+            />
+          )}
         </div>
       ))}
     </div>

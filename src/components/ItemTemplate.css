@@ -84,24 +84,6 @@
     outline: none;
 }
 
-.textarea-note,
-.textarea-result {
-	width: 100%;
-	min-height: 150px 200px;
-	padding: 10px 12px;
-	border-radius: 8px;
-	border: 1.5px solid #d1c4e9;
-	background: #faf7ff;
-	color: #333;
-	resize: vertical;
-    font-size: 1.03rem;
-	line-height: 1.6;
-    box-sizing: border-box;
-	margin-top: 4px;
-	margin-bottom: 0;
-	transition: border 0.2s;
-}
-
 @media (max-width: 900px) {
     .item-template {
         width: 100%;
