@@ -1,9 +1,10 @@
 import './Prompt.css'
 import CustomSelect from './CustomSelect'
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import ItemSelector from './ItemSelector';
 import ItemTemplate from './ItemTemplate';
+import PromptGenerator from './PromptGenerator';
 
 function Prompt({ volumes }) {
   const [selectedVolume, setSelectedVolume] = useState(null);
@@ -13,6 +14,8 @@ function Prompt({ volumes }) {
   const [expandedChapters, setExpandedChapters] = useState([]); // 控制章展開
   const [expandedSections, setExpandedSections] = useState([]); // 控制節展開
   const [selectedItem, setSelectedItem] = useState(null);
+  // 細項勾選與輸入內容
+  const [itemDetails, setItemDetails] = useState({});
 
   // 冊次選項
   const volumeOptions = volumes.map((v, idx) => ({ value: idx, label: v.name }));
@@ -51,6 +54,33 @@ function Prompt({ volumes }) {
     { id: 3, title: '快速背課' },
     { id: 4, title: 'Ai 小助教' },
   ];
+
+  // 當切換項目時，重置細項內容
+  const handleSelectItem = (itemId) => {
+    setSelectedItem(itemId);
+    setItemDetails({});
+  };
+
+  // 複製 prompt 功能
+  const promptResultRef = useRef(null);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMsg, setToastMsg] = useState('');
+  const handleCopy = () => {
+    const textarea = promptResultRef.current;
+    if (textarea && textarea.value) {
+      navigator.clipboard.writeText(textarea.value)
+        .then(() => {
+          setToastMsg('已複製到剪貼簿!');
+          setShowToast(true);
+          setTimeout(() => setShowToast(false), 1500);
+        })
+        .catch(() => {
+          setToastMsg('複製失敗');
+          setShowToast(true);
+          setTimeout(() => setShowToast(false), 1500);
+        });
+    }
+  };
 
   return (
     <div className="prompt">
@@ -204,25 +234,39 @@ function Prompt({ volumes }) {
             <ItemSelector
               items={itemOptions}
               selectedItem={selectedItem}
-              setSelectedItem={setSelectedItem}
+              setSelectedItem={handleSelectItem}
             />
-            <ItemTemplate key={selectedItem} selectedItem={selectedItem} />
+            <ItemTemplate
+              key={selectedItem}
+              selectedItem={selectedItem}
+              itemDetails={itemDetails}
+              setItemDetails={setItemDetails}
+            />
           </div>
         </div>
-
-        <div className='prompt-function'>
-          <h3>備註</h3>
-          <textarea className='textarea-note' placeholder='輸入備註...'></textarea>
+        {/* PromptGenerator 負責備註、生成、結果區塊 */}
+        <PromptGenerator
+          selectedVolume={selectedVolume}
+          selectedChapters={selectedChapters}
+          selectedSections={selectedSections}
+          selectedPoints={selectedPoints}
+          selectedItem={selectedItem}
+          volumes={volumes}
+          itemOptions={itemOptions}
+          itemDetails={itemDetails}
+          promptResultRef={promptResultRef}
+        />
+        <div style={{ position: 'relative', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <button
+            className="copy-button"
+            onClick={handleCopy}
+          >
+            複製到剪貼版
+          </button>
+          {showToast && (
+            <div className={`copy-toast${showToast ? ' show' : ''}`}>{toastMsg}</div>
+          )}
         </div>
-
-        <button className='generate-button'>生成 Prompt</button>
-
-        <div className='prompt-function'>
-          <h3>結果</h3>
-          <textarea className='textarea-result' placeholder='prompt 輸出結果在這裡...'></textarea>
-        </div>
-
-        <button className='copy-button'>複製到剪貼版</button>
       </div>
     </div>
   );

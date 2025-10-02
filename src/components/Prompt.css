@@ -108,6 +108,7 @@
     min-height: 150px;
     border: 1px solid #FFBF00;
     border-radius: 5px;
+    font-size: 1.08rem;
 }
 
 .textarea-result {
@@ -116,6 +117,7 @@
     min-height: 250px;
     border: 1px solid #FFBF00;
     border-radius: 5px;
+    font-size: 1.08rem;
 }
 
 .textarea-note:hover,
@@ -133,6 +135,7 @@
 
 /* button */
 
+
 .generate-button,
 .copy-button {
     width: 400px;
@@ -144,6 +147,8 @@
     border-radius: 10px;
     cursor: pointer;
     margin: 0 auto;
+    position: relative;
+    overflow: hidden;
 }
 
 .generate-button:hover,
@@ -154,4 +159,26 @@
 .generate-button:active,
 .copy-button:active {
     scale: 0.98;
+}
+
+/* 複製提示 toast */
+.copy-toast {
+    position: absolute;
+    bottom: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #01B0B0;
+    color: #fff;
+    padding: 12px 32px;
+    border-radius: 24px;
+    font-weight: 600;
+    font-size: 18px;
+    box-shadow: 0 4px 16px rgba(1,176,176,0.18);
+    z-index: 99;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s;
+}
+.copy-toast.show {
+    opacity: 1;
 }

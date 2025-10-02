@@ -25,6 +25,12 @@
     }
 }
 
+.item-template-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
 .item-template-content {
     width: 80%;
     display: flex;
@@ -36,6 +42,7 @@
     flex: 1;
     margin: 0;
     font-size: 1.1em;
+    align-self: center;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -45,22 +52,54 @@
     flex-shrink: 0;
     width: 60%;
     min-height: 30px;
-    padding: 10px;
+    margin: 2px;
+    padding: 8px 10px;
     border: 1px solid #FFBF00;
     border-radius: 5px;
+    font-size: 1.03rem;
+    line-height: 1.5;
+    box-sizing: border-box;
+}
+
+.input-box::placeholder {
+    font-size: 1.03rem;
+    line-height: normal;
+    color: #b9b9b9;
+    opacity: 1;
 }
 
 .input-box:hover,
 .input-box:hover {
     box-shadow: 0 2px 8px rgba(255, 215, 79, 0.15);
-    border: 3px solid #FFBF00;;
+    border: 3px solid #EF9B0F;
+    margin: 0px;
+    scale: 1.02;
 }
 
 .input-box:focus,
 .input-box:focus {
     box-shadow: 0 2px 8px rgba(255, 215, 79, 0.25);
     border: 3px solid #EF9B0F;
+    margin: 0px;
     outline: none;
+}
+
+.textarea-note,
+.textarea-result {
+	width: 100%;
+	min-height: 150px 200px;
+	padding: 10px 12px;
+	border-radius: 8px;
+	border: 1.5px solid #d1c4e9;
+	background: #faf7ff;
+	color: #333;
+	resize: vertical;
+    font-size: 1.03rem;
+	line-height: 1.6;
+    box-sizing: border-box;
+	margin-top: 4px;
+	margin-bottom: 0;
+	transition: border 0.2s;
 }
 
 @media (max-width: 900px) {
