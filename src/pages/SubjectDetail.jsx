@@ -19,7 +19,12 @@ function SubjectDetail() {
                 found = sys.subjects.find(sub => sub.name === subjectName);
                 if (found) break;
             }
-            setVolumes(found ? found.volumes : []);
+            const vols = found ? found.volumes : [];
+            setVolumes(vols);
+            console.log('[SubjectDetail] 科目資訊:', {
+                subjectName,
+                volumes: vols
+            });
         });
     }, [subjectName]);
     return (
@@ -29,8 +34,8 @@ function SubjectDetail() {
             </div>
             <div className='subject-detail-functions'>
                 <div className='subject-detail-left'>
-                    <Notebook />
-                    <DocumentDownload />
+                    <Notebook volumes={volumes} />
+                    <DocumentDownload volumes={volumes} />
                 </div>
                 <div className='subject-detail-right'>
                     <Prompt volumes={volumes} />

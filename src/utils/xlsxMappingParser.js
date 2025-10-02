@@ -57,11 +57,13 @@ export async function parseAllMappingFromXlsx() {
   const dfGrade = getFirstSheetJson(gradeWb);
   const dfSubject = getFirstSheetJson(subjectWb);
 
-  // 冊次ID與名稱、subjectId
+  // 冊次ID與名稱、subjectId、NotebookLM_URL
   const allGrades = dfGrade.map(row => ({
     gradeId: row.gradeId,
     gradeName: row.gradeName,
     subjectId: row.subjectId,
+    notebookUrl: row.NotebookLM_URL || row.notebookUrl || row.notebook_url || '',
+    downloadUrl: row.Download_URL || row.downloadUrl || row.download_url || '',
   }));
 
   // subjectId 對應 subjectName, academicSystem
@@ -87,12 +89,14 @@ export async function parseAllMappingFromXlsx() {
     const gradeId = row.gradeId;
     const gradeName = row.gradeName;
     const subjectId = row.subjectId;
+    const notebookUrl = row.notebookUrl;
+    const downloadUrl = row.downloadUrl;
     const subjectInfo = subjectMap[subjectId];
     if (!subjectInfo) return;
     const academic = subjectInfo.academicSystem;
     const subject = subjectInfo.subjectName;
     const cleanGradeName = typeof gradeName === 'string' && gradeName.includes(' (ID:') ? gradeName.split(' (ID:')[0] : gradeName;
-    const volumeObj = { name: cleanGradeName, chapters: buildHierarchicalMapping(dfChapter, gradeId) };
+    const volumeObj = { name: cleanGradeName, chapters: buildHierarchicalMapping(dfChapter, gradeId), notebookUrl, downloadUrl };
     academicDict[academic][subject].push(volumeObj);
   });
 

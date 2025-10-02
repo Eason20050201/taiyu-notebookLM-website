@@ -48,3 +48,25 @@
     scale: 1.05;
 }
 
+.notebook-item {
+  display: flex;
+  align-items: center;
+  margin: 6px 0;
+  gap: 8px;
+}
+
+.notebook-url:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.domain-ok {
+  color: green;
+  font-size: 0.85em;
+}
+
+.domain-bad {
+  color: red;
+  font-size: 0.85em;
+}
+
