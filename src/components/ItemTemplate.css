@@ -5,9 +5,23 @@
     display: flex;
     flex-direction: column;
     gap: 18px;
-    background-color: #ccc;    
+    background-color: #fffbe6;    
     border-radius: 15px;
     align-items: center;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        /* Slide Right In animation */
+        animation: slideRightIn 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes slideRightIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-60px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 .item-template-content {

@@ -206,7 +206,7 @@ function Prompt({ volumes }) {
               selectedItem={selectedItem}
               setSelectedItem={setSelectedItem}
             />
-            <ItemTemplate selectedItem={selectedItem} />
+            <ItemTemplate key={selectedItem} selectedItem={selectedItem} />
           </div>
         </div>
 
