@@ -34,7 +34,6 @@
 
 .item-template-content h3 {
     flex: 1;
-    min-width: 0;
     margin: 0;
     font-size: 1.1em;
     white-space: nowrap;
@@ -42,12 +41,26 @@
     text-overflow: ellipsis;
 }
 
-.item-template-content select,
-.item-template-content input {
+.input-box {
     flex-shrink: 0;
-    margin-left: 12px;
-    min-width: 80px;
-    max-width: 140px;
+    width: 60%;
+    min-height: 30px;
+    padding: 10px;
+    border: 1px solid #FFBF00;
+    border-radius: 5px;
+}
+
+.input-box:hover,
+.input-box:hover {
+    box-shadow: 0 2px 8px rgba(255, 215, 79, 0.15);
+    border: 3px solid #FFBF00;;
+}
+
+.input-box:focus,
+.input-box:focus {
+    box-shadow: 0 2px 8px rgba(255, 215, 79, 0.25);
+    border: 3px solid #EF9B0F;
+    outline: none;
 }
 
 @media (max-width: 900px) {
