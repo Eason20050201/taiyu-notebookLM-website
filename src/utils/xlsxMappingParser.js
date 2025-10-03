@@ -37,11 +37,12 @@ function getFirstSheetJson(workbook) {
 }
 
 export async function parseAllMappingFromXlsx() {
-  // fetch 三個 xlsx 檔案
+  // fetch 三個 xlsx 檔案，路徑需加上 BASE_URL 以支援 GitHub Pages 子路徑
+  const base = import.meta.env.BASE_URL;
   const [chapterRes, gradeRes, subjectRes] = await Promise.all([
-    fetch('/online-chapter.xlsx'),
-    fetch('/online-volume.xlsx'),
-    fetch('/taiyu-notebookLM-subject.xlsx'),
+    fetch(`${base}online-chapter.xlsx`),
+    fetch(`${base}online-volume.xlsx`),
+    fetch(`${base}taiyu-notebookLM-subject.xlsx`),
   ]);
   const [chapterBuf, gradeBuf, subjectBuf] = await Promise.all([
     chapterRes.arrayBuffer(),
@@ -77,7 +78,7 @@ export async function parseAllMappingFromXlsx() {
 
   // 依學制分群
   const academicDict = {};
-  Object.entries(subjectMap).forEach(([subjectId, info]) => {
+  Object.entries(subjectMap).forEach(([_, info]) => {
     const academic = info.academicSystem;
     const subject = info.subjectName;
     if (!academicDict[academic]) academicDict[academic] = {};
