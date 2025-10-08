@@ -51,7 +51,9 @@
 .input-box {
     flex-shrink: 0;
     width: 60%;
-    min-height: 30px;
+    min-height: 80px;         /* 預設高度 */
+    max-height: 200px;    /* 超過這個高度就出現捲軸 */
+    resize: vertical;     /* 允許手動拉高 */
     margin: 2px;
     padding: 8px 10px;
     border: 1px solid #FFBF00;

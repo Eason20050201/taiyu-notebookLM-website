@@ -6,7 +6,7 @@ import ItemSelector from './ItemSelector';
 import ItemTemplate from './ItemTemplate';
 import PromptGenerator from './PromptGenerator';
 
-function Prompt({ volumes }) {
+function Prompt({ volumes, subjectName }) {
   const [selectedVolume, setSelectedVolume] = useState(null);
   const [selectedChapters, setSelectedChapters] = useState([]);
   const [selectedSections, setSelectedSections] = useState([]);
@@ -88,6 +88,24 @@ function Prompt({ volumes }) {
         <h2>💡 老師想做甚麼? Prompt 生成器協助你!</h2>
       </div>
       <div className="prompt-functions">
+        <div className='prompt-function'>
+          <h3>項目</h3>
+          <div className='prompt-item'>
+            <ItemSelector
+              items={itemOptions}
+              selectedItem={selectedItem}
+              setSelectedItem={handleSelectItem}
+            />
+            <ItemTemplate
+              key={selectedItem}
+              selectedItem={selectedItem}
+              itemDetails={itemDetails}
+              setItemDetails={setItemDetails}
+              subjectName={subjectName}
+            />
+          </div>
+        </div>
+
         <div className='prompt-function'>
           <h3>冊次</h3>
           <CustomSelect
@@ -227,23 +245,6 @@ function Prompt({ volumes }) {
           </div>
         </div>
 
-
-        <div className='prompt-function'>
-          <h3>項目</h3>
-          <div className='prompt-item'>
-            <ItemSelector
-              items={itemOptions}
-              selectedItem={selectedItem}
-              setSelectedItem={handleSelectItem}
-            />
-            <ItemTemplate
-              key={selectedItem}
-              selectedItem={selectedItem}
-              itemDetails={itemDetails}
-              setItemDetails={setItemDetails}
-            />
-          </div>
-        </div>
         {/* PromptGenerator 負責備註、生成、結果區塊 */}
         <PromptGenerator
           selectedVolume={selectedVolume}
@@ -255,6 +256,7 @@ function Prompt({ volumes }) {
           itemOptions={itemOptions}
           itemDetails={itemDetails}
           promptResultRef={promptResultRef}
+          subjectName={subjectName}
         />
         <div style={{ position: 'relative', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <button

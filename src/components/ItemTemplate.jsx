@@ -1,29 +1,9 @@
+
 import "./ItemTemplate.css";
 import CustomSelect from "./CustomSelect";
+import templates from "./templates";
 
-function ItemTemplate({ selectedItem, itemDetails, setItemDetails }) {
-  // 欄位資料結構
-  const templates = {
-    1: [
-      { label: '課程目標', placeholder: '請輸入課程目標...' },
-      { label: '活動流程', placeholder: '請輸入活動流程...' },
-      { label: '教具/媒材需求', placeholder: '請輸入教具/媒材需求...' },
-    ],
-    2: [
-      { label: '題型選擇', placeholder: '請輸入題型...', options: ['單選題', '多選題', '填充題', '問答題'] },
-      { label: '難度設定', placeholder: '請輸入難度...', options: ['易', '中', '難'] },
-      { label: '對應課綱能力指標', placeholder: '請輸入能力指標...' },
-      { label: '自動解析', placeholder: '請輸入自動解析...' },
-    ],
-    3: [
-      { label: '產出18週完整備課表', placeholder: '請輸入你想要的週數..' },
-      { label: '單元反思點', placeholder: '請輸入單元反思點...' },
-    ],
-    4: [
-      { label: '連結 NotebookLM', placeholder: '請輸入 NotebookLM 連結...' },
-      { label: '封閉式對話', placeholder: '請輸入封閉式對話內容...' },
-    ],
-  };
+function ItemTemplate({ selectedItem, itemDetails, setItemDetails, subjectName = '' }) {
 
   if (!selectedItem || !templates[selectedItem]) return null;
 
@@ -48,6 +28,13 @@ function ItemTemplate({ selectedItem, itemDetails, setItemDetails }) {
     }));
   };
 
+  // 取得已替換 subjectName 的 placeholder
+  const getPlaceholder = (ph) => {
+    if (!ph) return '';
+    if (!subjectName) return ph;
+    return ph.replace(/\{地理科\}|\{地理\}|\{科目\}/g, subjectName);
+  };
+
   return (
     <div className="item-template">
       <div className="item-template-title">可以勾選與輸入您想要的細項</div>
@@ -63,17 +50,16 @@ function ItemTemplate({ selectedItem, itemDetails, setItemDetails }) {
           {field.options ? (
             <CustomSelect
               options={field.options.map(opt => ({ label: opt, value: opt }))}
-              placeholder={field.placeholder}
+              placeholder={getPlaceholder(field.placeholder)}
               onChange={option => handleInput(field.label, option ? option.value : '')}
-              // 讓 CustomSelect 受控於 itemDetails
               value={itemDetails?.[field.label]?.value || ''}
               disabled={!itemDetails?.[field.label]?.checked}
             />
           ) : (
-            <input
+            <textarea
               type="text"
               className="input-box"
-              placeholder={field.placeholder}
+              placeholder={getPlaceholder(field.placeholder)}
               value={itemDetails?.[field.label]?.value || ''}
               onChange={e => handleInput(field.label, e.target.value)}
               disabled={!itemDetails?.[field.label]?.checked}

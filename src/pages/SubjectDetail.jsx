@@ -38,7 +38,7 @@ function SubjectDetail() {
                     <DocumentDownload volumes={volumes} />
                 </div>
                 <div className='subject-detail-right'>
-                    <Prompt volumes={volumes} />
+                    <Prompt volumes={volumes} subjectName={subjectName} />
                 </div>
             </div>
         </div>
