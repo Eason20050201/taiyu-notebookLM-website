@@ -41,7 +41,7 @@ export const templates = {
       { label: '難度設定', placeholder: '易', options: ['易', '中', '難'] },
       { label: '對應課綱能力指標', placeholder: '請輸入能力指標...' },
       { label: '題數', placeholder: 'ex: 3 題' },
-      { label: '解析', placeholder: 'ex: 要', options: ['要', '不要'] },
+      { label: '解析', placeholder: '要', options: ['要', '不要'] },
     ],
     3: [
       { label: '產出18週完整備課表', placeholder: '請輸入你想要的週數..' },
