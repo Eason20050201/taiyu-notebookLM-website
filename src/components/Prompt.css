@@ -70,6 +70,7 @@
     background-color: #FFDF80;    
     border-radius: 15px;
     align-items: center;
+    overflow: visible; /* 確保下拉選單不被裁切 */
 }
 
 .prompt-function {

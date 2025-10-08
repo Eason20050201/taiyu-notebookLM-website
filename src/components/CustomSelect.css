@@ -10,7 +10,7 @@
 /* placeholder 與選中後文字的顏色區分 */
 .custom-select-trigger {
     padding: 8px 12px;
-    border: 1px solid #FFBF00;
+    border: 2px solid #FFBF00;
     border-radius: 6px;
     background: white;
     color: #aaa;
@@ -24,9 +24,16 @@
 }
 
 .custom-select-trigger:hover {
-    box-shadow: 0 2px 8px rgba(255, 191, 0, 0.4);
+    background: #FFF3C1;
+    color: #333;
+    font-weight: bold;
+    box-shadow: 0 4px 16px rgba(255, 191, 0, 0.25);
+    border: 2px solid #EF9B0F;
+    /* hover 更明顯，只改顏色不改寬度 */
 }
 
+/* 選單容器，先隱藏 */
+/* 下拉選單展開時層級最高，避免被遮住 */
 /* 選單容器，先隱藏 */
 .custom-options {
     position: absolute;
@@ -37,7 +44,7 @@
     border: 1px solid #FFBF00;
     border-radius: 6px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    z-index: 10;
+    z-index: 1050; /* 提高層級，避免被遮住 */
 
     /* 動畫效果 */
     max-height: 0;
@@ -62,6 +69,7 @@
 .custom-option:hover {
     background: #FFE699;
     /* hover 顏色 */
+
 }
 
 .custom-option.selected {

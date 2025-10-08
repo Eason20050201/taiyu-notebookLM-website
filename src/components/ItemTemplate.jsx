@@ -1,11 +1,13 @@
 
 import "./ItemTemplate.css";
 import CustomSelect from "./CustomSelect";
-import templates from "./templates";
+import { templates } from "./templates";
+
 
 function ItemTemplate({ selectedItem, itemDetails, setItemDetails, subjectName = '' }) {
-
-  if (!selectedItem || !templates[selectedItem]) return null;
+  // 取得正確的 template 結構
+  const subjectTemplates = templates[subjectName] || templates.default;
+  if (!selectedItem || !subjectTemplates[selectedItem]) return null;
 
   // 處理勾選與輸入
   const handleCheck = (label, checked) => {
@@ -38,7 +40,7 @@ function ItemTemplate({ selectedItem, itemDetails, setItemDetails, subjectName =
   return (
     <div className="item-template">
       <div className="item-template-title">可以勾選與輸入您想要的細項</div>
-      {templates[selectedItem].map((field, idx) => (
+      {subjectTemplates[selectedItem].map((field, idx) => (
         <div className="item-template-content" key={field.label} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <input
             type="checkbox"
@@ -52,7 +54,11 @@ function ItemTemplate({ selectedItem, itemDetails, setItemDetails, subjectName =
               options={field.options.map(opt => ({ label: opt, value: opt }))}
               placeholder={getPlaceholder(field.placeholder)}
               onChange={option => handleInput(field.label, option ? option.value : '')}
-              value={itemDetails?.[field.label]?.value || ''}
+              value={
+                field.options
+                  .map(opt => ({ label: opt, value: opt }))
+                  .find(optObj => optObj.value === itemDetails?.[field.label]?.value) || null
+              }
               disabled={!itemDetails?.[field.label]?.checked}
             />
           ) : (

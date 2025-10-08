@@ -12,6 +12,7 @@
     /* Slide Right In animation */
     animation: slideRightIn 0.7s cubic-bezier(0.23, 1, 0.32, 1);
     animation-fill-mode: both;
+    overflow: visible;
 }
 
 @keyframes slideRightIn {
@@ -74,7 +75,6 @@
 .input-box:hover {
     box-shadow: 0 2px 8px rgba(255, 215, 79, 0.15);
     border: 3px solid #EF9B0F;
-    margin: 0px;
     scale: 1.02;
 }
 
@@ -82,7 +82,6 @@
 .input-box:focus {
     box-shadow: 0 2px 8px rgba(255, 215, 79, 0.25);
     border: 3px solid #EF9B0F;
-    margin: 0px;
     outline: none;
 }
 
@@ -109,16 +108,5 @@
         text-align: left;
         white-space: normal;
         margin-bottom: 6px;
-    }
-
-    /* text-align: left; */
-    /* white-space: normal; */
-    .item-template-content select,
-    .item-template-content input {
-        margin-left: 0;
-        margin-top: 6px;
-        width: 100%;
-        max-width: 100%;
-        min-width: 0;
     }
 }

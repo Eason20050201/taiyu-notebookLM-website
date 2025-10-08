@@ -2,7 +2,7 @@ import './Prompt.css';
 
 
 import React, { useState } from 'react';
-import templates from './templates';
+import { templates } from './templates';
 
 function PromptGenerator({
   selectedVolume,

@@ -2,6 +2,7 @@ import './Prompt.css'
 import CustomSelect from './CustomSelect'
 
 import { useState, useRef } from 'react';
+import { itemOptionsMap } from './templates';
 import ItemSelector from './ItemSelector';
 import ItemTemplate from './ItemTemplate';
 import PromptGenerator from './PromptGenerator';
@@ -13,7 +14,8 @@ function Prompt({ volumes, subjectName }) {
   const [selectedPoints, setSelectedPoints] = useState([]);
   const [expandedChapters, setExpandedChapters] = useState([]); // 控制章展開
   const [expandedSections, setExpandedSections] = useState([]); // 控制節展開
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null); // 第一層
+  const [selectedSubItem, setSelectedSubItem] = useState(null); // 第二層（僅部分科目/項目有）
   // 細項勾選與輸入內容
   const [itemDetails, setItemDetails] = useState({});
 
@@ -48,16 +50,23 @@ function Prompt({ volumes, subjectName }) {
     ? currentSections.flatMap((sec, secIdx) => sec.points.map((pt, ptIdx) => ({ value: `${selectedSections[secIdx]}-${ptIdx}`, label: pt.name })))
     : [];
 
-  const itemOptions = [
-    { id: 1, title: '教案' },
-    { id: 2, title: '素養題' },
-    { id: 3, title: '快速備課' },
-    { id: 4, title: 'Ai 小助教' },
-  ];
+  // 根據 subjectName 顯示不同的項目（統一用 itemOptionsMap）
+  const itemOptions = itemOptionsMap[subjectName] || itemOptionsMap.default;
 
-  // 當切換項目時，重置細項內容
+  // 取得目前選到的主項目
+  const mainItem = itemOptions.find(i => i.id === selectedItem);
+  const subOptions = mainItem?.children || null;
+
+  // 當切換主項目時，重置細項內容與子項目
   const handleSelectItem = (itemId) => {
     setSelectedItem(itemId);
+    setSelectedSubItem(null);
+    setItemDetails({});
+  };
+
+  // 當切換子項目時
+  const handleSelectSubItem = (subId) => {
+    setSelectedSubItem(subId);
     setItemDetails({});
   };
 
@@ -92,15 +101,26 @@ function Prompt({ volumes, subjectName }) {
           <h3>項目</h3>
           
           <div className='prompt-item'>
+            {/* 第一層選單 */}
             <ItemSelector
               items={itemOptions}
               selectedItem={selectedItem}
               setSelectedItem={handleSelectItem}
             />
-            
+            {/* 第二層選單（僅有 children 時顯示） */}
+            {subOptions && (
+              <div style={{ margin: '10px 0' }}>
+                <ItemSelector
+                  items={subOptions}
+                  selectedItem={selectedSubItem}
+                  setSelectedItem={handleSelectSubItem}
+                />
+              </div>
+            )}
+            {/* 傳給 ItemTemplate 的 id：有 subItem 優先用 subItem，否則用主項目 */}
             <ItemTemplate
-              key={selectedItem}
-              selectedItem={selectedItem}
+              key={selectedSubItem || selectedItem}
+              selectedItem={selectedSubItem || selectedItem}
               itemDetails={itemDetails}
               setItemDetails={setItemDetails}
               subjectName={subjectName}
