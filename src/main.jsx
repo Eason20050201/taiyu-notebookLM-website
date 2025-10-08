@@ -7,3 +7,6 @@ createRoot(document.getElementById('root')).render(
     <App />
   </StrictMode>,
 )
+
+// Mark app bootstrapped for reload watchdog in index.html
+try { window.__APP_BOOTSTRAPPED = true; } catch (_) {}

@@ -8,6 +8,28 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // If the JS bundle fails to load (e.g., cached old index.html pointing to removed chunks),
+      // auto-reload once with a cache-busting query to recover from a white screen.
+      window.__APP_BOOTSTRAPPED = false;
+      (function () {
+        var reloaded = sessionStorage.getItem('app_reloaded_once');
+        setTimeout(function () {
+          if (!window.__APP_BOOTSTRAPPED && !reloaded) {
+            try {
+              var url = new URL(window.location.href);
+              url.searchParams.set('v', Date.now().toString());
+              sessionStorage.setItem('app_reloaded_once', '1');
+              window.location.replace(url.toString());
+            } catch (e) {
+              // Fallback simple reload
+              sessionStorage.setItem('app_reloaded_once', '1');
+              window.location.reload();
+            }
+          }
+        }, 2500);
+      })();
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

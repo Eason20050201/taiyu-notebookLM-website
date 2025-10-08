@@ -19,6 +19,13 @@ function PromptGenerator({
   const [note, setNote] = useState('');
   const [result, setResult] = useState('');
 
+  // 解析目前所選項目的欄位定義（先找科目模板，找不到用 default）
+  const resolveTemplateFields = () => {
+    if (!selectedItem) return [];
+    const subjectTemplates = (subjectName && templates[subjectName]) ? templates[subjectName] : {};
+    return subjectTemplates[selectedItem] || (templates.default ? templates.default[selectedItem] : [] ) || [];
+  };
+
   // 組裝 prompt 字串
   const generatePrompt = () => {
     if (selectedVolume === null || !volumes[selectedVolume]) {
@@ -30,9 +37,11 @@ function PromptGenerator({
 
     // 取得 placeholder 並自動替換 {地理} 相關為 subjectName
     const getPlaceholder = (label) => {
-      if (!selectedItem || !templates[selectedItem]) return '';
-      const field = templates[selectedItem].find(f => f.label === label);
-      let ph = field?.placeholder || '';
+      if (!selectedItem) return '';
+      const fields = resolveTemplateFields();
+      const field = fields.find(f => f.label === label);
+      // 若模板有 options 但未提供 placeholder，預設取第一個選項
+      let ph = field?.placeholder ?? (Array.isArray(field?.options) ? field.options[0] : '');
       if (subjectName) {
         ph = ph.replace(/\{地理科\}|\{地理\}|\{科目\}/g, subjectName);
       }

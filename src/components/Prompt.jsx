@@ -273,7 +273,7 @@ function Prompt({ volumes, subjectName }) {
           selectedChapters={selectedChapters}
           selectedSections={selectedSections}
           selectedPoints={selectedPoints}
-          selectedItem={selectedItem}
+          selectedItem={selectedSubItem || selectedItem}
           volumes={volumes}
           itemOptions={itemOptions}
           itemDetails={itemDetails}
