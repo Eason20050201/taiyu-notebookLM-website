@@ -3,11 +3,11 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Homepage from './pages/Homepage';
 import SubjectDetail from './pages/SubjectDetail';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
-    <BrowserRouter basename="/taiyu-notebookLM-website">
+    <HashRouter basename="/taiyu-notebookLM-website">
       <div className="app">
         <Header />
         <Routes>
@@ -16,7 +16,7 @@ function App() {
         </Routes>
         <Footer />
       </div>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
