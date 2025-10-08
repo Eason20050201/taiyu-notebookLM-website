@@ -5,4 +5,13 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   base: "/taiyu-notebookLM-website/", // 👈 這裡要加上 repo 名稱
+  server: {
+    historyApiFallback: true,
+  },
+  build: {
+    rollupOptions: {},
+  },
+  preview: {
+    historyApiFallback: true,
+  },
 });
