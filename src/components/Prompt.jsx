@@ -90,12 +90,14 @@ function Prompt({ volumes, subjectName }) {
       <div className="prompt-functions">
         <div className='prompt-function'>
           <h3>項目</h3>
+          
           <div className='prompt-item'>
             <ItemSelector
               items={itemOptions}
               selectedItem={selectedItem}
               setSelectedItem={handleSelectItem}
             />
+            
             <ItemTemplate
               key={selectedItem}
               selectedItem={selectedItem}

@@ -7,7 +7,7 @@ const templates = {
     { label: '教學對象', placeholder: 'ex: 高中一年級學生' },
     { label: '節數', placeholder: 'ex: 2 節課(共 100 分鐘)' },
     { label: '教學法', placeholder: 'ex: PBL(project-based learning)' },
-    { label: '任務', placeholder: 'ex: 以{地理科}為例，設計一個教案' },
+    { label: '任務', placeholder: 'ex: 以{地理科}為例，設計一個能培養學生核心素養的學習活動或專案' },
     { label: '具體內容與限制', placeholder: 'ex: 教案請列出主題、課綱學習表現、實質內涵、核心問題、教學步驟與時間(包含教師需給予的引導語)、需要使用的數位工具、軟硬體設備、注意事項、參考文獻(請使用APA第7版格式撰寫，若無作者與年代資訊，請以來源名稱標示，請不要顯示數字)' },
     { label: '呈現格式', placeholder: 'ex: 教案內容請使用表格呈現' },
   ],
