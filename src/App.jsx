@@ -5,9 +5,11 @@ import Homepage from './pages/Homepage';
 import SubjectDetail from './pages/SubjectDetail';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 
+const basename = window.location.hostname === 'localhost' ? '' : '/taiyu-notebookLM-website';
+
 function App() {
   return (
-    <HashRouter basename="/taiyu-notebookLM-website">
+    <HashRouter basename={basename}>
       <div className="app">
         <Header />
         <Routes>
