@@ -12,6 +12,7 @@
   align-items: center;
   width: 80%;
   margin: 0 auto;
+  position: relative;
 }
 
 .academic-system-card {
@@ -23,17 +24,25 @@
   text-align: left;
   margin: 20px;
   padding: 15px;
-  background-image: linear-gradient(135deg, #f5f5f5, #f5f5f5);
-  /* 預設灰白底（無顏色狀態） */
   cursor: pointer;
   transition: background-image 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s;
+  position: relative;
+}
+/* Sliding Tab Indicator */
+.tab-indicator {
+  position: absolute;
+  left: 0;
+  top: 20px; /* 對齊卡片的 margin-top */
+  height: auto;
+  background: linear-gradient(135deg, #01FF93, #01E7FF);
+  border-radius: 15px;
+  box-shadow: 0 10px 24px 0 rgba(1, 176, 224, 0.32), 0 2px 8px 0 rgba(1, 231, 255, 0.18); /* 更明顯的下方陰影 */
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), height 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 0;
 }
 
 .academic-system-card.active {
-  background-image: linear-gradient(135deg, #01FF93, #01E7FF);
-  /* 高亮狀態 */
   transform: scale(1.04);
-  box-shadow: 0 8px 24px rgba(1, 231, 255, 0.18);
 }
 
 .card-icon {
@@ -65,4 +74,11 @@
     width: 80%;
     margin: 15px 0;
   }
+
+  .tab-indicator {
+    top: 0px;
+  }
+  
+
+  /* .tab-indicator 的 width 和 left 交由 JS 控制，不在這裡強制覆蓋 */
 }

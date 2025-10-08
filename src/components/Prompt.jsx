@@ -51,7 +51,7 @@ function Prompt({ volumes }) {
   const itemOptions = [
     { id: 1, title: '教案' },
     { id: 2, title: '素養題' },
-    { id: 3, title: '快速背課' },
+    { id: 3, title: '快速備課' },
     { id: 4, title: 'Ai 小助教' },
   ];
 

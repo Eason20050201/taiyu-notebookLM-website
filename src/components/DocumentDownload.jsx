@@ -27,7 +27,8 @@ function DocumentDownload({ volumes = [] }) {
   return (
     <div className="document-download">
       <div className='document-download-title'>
-        <h2>泰宇翔宇 notebookLM 文件下載連結</h2>
+        <h2>想查看泰宇翔宇文件？</h2>
+        <h2>點這裡下載 NotebookLM！</h2>
       </div>
       <div className='document-download-urls'>
         {volumes.filter(v => v.downloadUrl).map((v, idx) => {

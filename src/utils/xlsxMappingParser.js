@@ -36,79 +36,91 @@ function getFirstSheetJson(workbook) {
   return XLSX.utils.sheet_to_json(workbook.Sheets[firstSheetName]);
 }
 
+// 快取變數
+let _mappingCache = null;
+let _mappingPromise = null;
+
 export async function parseAllMappingFromXlsx() {
-  // fetch 三個 xlsx 檔案，路徑需加上 BASE_URL 以支援 GitHub Pages 子路徑
-  const base = import.meta.env.BASE_URL;
-  const [chapterRes, gradeRes, subjectRes] = await Promise.all([
-    fetch(`${base}online-chapter.xlsx`),
-    fetch(`${base}online-volume.xlsx`),
-    fetch(`${base}taiyu-notebookLM-subject.xlsx`),
-  ]);
-  const [chapterBuf, gradeBuf, subjectBuf] = await Promise.all([
-    chapterRes.arrayBuffer(),
-    gradeRes.arrayBuffer(),
-    subjectRes.arrayBuffer(),
-  ]);
-  // 解析 xlsx
-  const chapterWb = XLSX.read(chapterBuf, { type: 'array' });
-  const gradeWb = XLSX.read(gradeBuf, { type: 'array' });
-  const subjectWb = XLSX.read(subjectBuf, { type: 'array' });
+  if (_mappingCache) return _mappingCache;
+  if (_mappingPromise) return _mappingPromise;
+  _mappingPromise = (async () => {
+    // fetch 三個 xlsx 檔案，路徑需加上 BASE_URL 以支援 GitHub Pages 子路徑
+    const base = import.meta.env.BASE_URL;
+    const [chapterRes, gradeRes, subjectRes] = await Promise.all([
+      fetch(`${base}online-chapter.xlsx`),
+      fetch(`${base}online-volume.xlsx`),
+      fetch(`${base}taiyu-notebookLM-subject.xlsx`),
+    ]);
+    const [chapterBuf, gradeBuf, subjectBuf] = await Promise.all([
+      chapterRes.arrayBuffer(),
+      gradeRes.arrayBuffer(),
+      subjectRes.arrayBuffer(),
+    ]);
+    // 解析 xlsx
+    const chapterWb = XLSX.read(chapterBuf, { type: 'array' });
+    const gradeWb = XLSX.read(gradeBuf, { type: 'array' });
+    const subjectWb = XLSX.read(subjectBuf, { type: 'array' });
 
-  const dfChapter = getFirstSheetJson(chapterWb);
-  const dfGrade = getFirstSheetJson(gradeWb);
-  const dfSubject = getFirstSheetJson(subjectWb);
+    const dfChapter = getFirstSheetJson(chapterWb);
+    const dfGrade = getFirstSheetJson(gradeWb);
+    const dfSubject = getFirstSheetJson(subjectWb);
 
-  // 冊次ID與名稱、subjectId、NotebookLM_URL
-  const allGrades = dfGrade.map(row => ({
-    gradeId: row.gradeId,
-    gradeName: row.gradeName,
-    subjectId: row.subjectId,
-    notebookUrl: row.NotebookLM_URL || row.notebookUrl || row.notebook_url || '',
-    downloadUrl: row.Download_URL || row.downloadUrl || row.download_url || '',
-  }));
+    // 冊次ID與名稱、subjectId、NotebookLM_URL
+    const allGrades = dfGrade.map(row => ({
+      gradeId: row.gradeId,
+      gradeName: row.gradeName,
+      subjectId: row.subjectId,
+      notebookUrl: row.NotebookLM_URL || row.notebookUrl || row.notebook_url || '',
+      downloadUrl: row.Download_URL || row.downloadUrl || row.download_url || '',
+    }));
 
-  // subjectId 對應 subjectName, academicSystem
-  const subjectMap = {};
-  dfSubject.forEach(row => {
-    subjectMap[row.subjectId] = {
-      subjectName: row.subjectName,
-      academicSystem: ACADEMIC_SYSTEM_MAP[row.academicSystem] || String(row.academicSystem),
-    };
-  });
+    // subjectId 對應 subjectName, academicSystem
+    const subjectMap = {};
+    dfSubject.forEach(row => {
+      subjectMap[row.subjectId] = {
+        subjectName: row.subjectName,
+        academicSystem: ACADEMIC_SYSTEM_MAP[row.academicSystem] || String(row.academicSystem),
+      };
+    });
 
-  // 依學制分群
-  const academicDict = {};
-  Object.entries(subjectMap).forEach(([_, info]) => {
-    const academic = info.academicSystem;
-    const subject = info.subjectName;
-    if (!academicDict[academic]) academicDict[academic] = {};
-    if (!academicDict[academic][subject]) academicDict[academic][subject] = [];
-  });
+    // 依學制分群
+    const academicDict = {};
+    Object.entries(subjectMap).forEach(([_, info]) => {
+      const academic = info.academicSystem;
+      const subject = info.subjectName;
+      if (!academicDict[academic]) academicDict[academic] = {};
+      if (!academicDict[academic][subject]) academicDict[academic][subject] = [];
+    });
 
-  // 再依冊次分群
-  allGrades.forEach(row => {
-    const gradeId = row.gradeId;
-    const gradeName = row.gradeName;
-    const subjectId = row.subjectId;
-    const notebookUrl = row.notebookUrl;
-    const downloadUrl = row.downloadUrl;
-    const subjectInfo = subjectMap[subjectId];
-    if (!subjectInfo) return;
-    const academic = subjectInfo.academicSystem;
-    const subject = subjectInfo.subjectName;
-    const cleanGradeName = typeof gradeName === 'string' && gradeName.includes(' (ID:') ? gradeName.split(' (ID:')[0] : gradeName;
-    const volumeObj = { name: cleanGradeName, chapters: buildHierarchicalMapping(dfChapter, gradeId), notebookUrl, downloadUrl };
-    academicDict[academic][subject].push(volumeObj);
-  });
+    // 再依冊次分群
+    allGrades.forEach(row => {
+      const gradeId = row.gradeId;
+      const gradeName = row.gradeName;
+      const subjectId = row.subjectId;
+      const notebookUrl = row.notebookUrl;
+      const downloadUrl = row.downloadUrl;
+      const subjectInfo = subjectMap[subjectId];
+      if (!subjectInfo) return;
+      const academic = subjectInfo.academicSystem;
+      const subject = subjectInfo.subjectName;
+      const cleanGradeName = typeof gradeName === 'string' && gradeName.includes(' (ID:') ? gradeName.split(' (ID:')[0] : gradeName;
+      const volumeObj = { name: cleanGradeName, chapters: buildHierarchicalMapping(dfChapter, gradeId), notebookUrl, downloadUrl };
+      academicDict[academic][subject].push(volumeObj);
+    });
 
-  // academicSystems 陣列
-  const academicSystems = Object.entries(academicDict).map(([academic, subjects]) => ({
-    name: academic,
-    subjects: Object.entries(subjects).map(([subject, volumes]) => ({
-      name: subject,
-      volumes,
-    })),
-  }));
+    // academicSystems 陣列
+    const academicSystems = Object.entries(academicDict).map(([academic, subjects]) => ({
+      name: academic,
+      subjects: Object.entries(subjects).map(([subject, volumes]) => ({
+        name: subject,
+        volumes,
+      })),
+    }));
 
-  return { academicSystems };
+    const result = { academicSystems };
+    _mappingCache = result;
+    _mappingPromise = null;
+    return result;
+  })();
+  return _mappingPromise;
 }
