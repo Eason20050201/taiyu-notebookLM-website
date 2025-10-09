@@ -1,0 +1,94 @@
+.bubble-button-container {
+  position: relative;
+  display: inline-block;
+}
+
+.button {
+  background-color: var(--button-color);
+  border: none;
+  color: var(--text-color);
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  user-select: none;
+  letter-spacing: 1px;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.1s ease-out;
+  cursor: pointer;
+}
+
+.button:hover {
+  filter: brightness(1.1);
+}
+
+.button:active {
+  transform: scale(0.95);
+}
+
+.button--bubble {
+  position: relative;
+  z-index: 2;
+  background: none;
+}
+
+.button--bubble__container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+}
+
+.button--bubble__effect-container {
+  position: absolute;
+  display: block;
+  width: 200%;
+  height: 400%;
+  top: -150%;
+  left: -50%;
+  filter: url("#goo");
+  pointer-events: none;
+}
+
+.circle {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background-color: var(--button-color);
+  transition: background 0.1s ease-out;
+}
+
+.circle.top-left {
+  top: 40%;
+  left: 27%;
+}
+
+.circle.bottom-right {
+  bottom: 40%;
+  right: 27%;
+}
+
+.effect-button {
+  position: absolute;
+  width: 50%;
+  height: 25%;
+  top: 50%;
+  left: 25%;
+  z-index: 1;
+  transform: translateY(-50%);
+  background-color: var(--button-color);
+  transition: background 0.1s ease-out;
+}
+
+.goo {
+  position: absolute;
+  visibility: hidden;
+  width: 1px;
+  height: 1px;
+}

@@ -6,6 +6,7 @@ import { itemOptionsMap } from './templates';
 import ItemSelector from './ItemSelector';
 import ItemTemplate from './ItemTemplate';
 import PromptGenerator from './PromptGenerator';
+import BubbleButton from './BubbleButton';
 
 function Prompt({ volumes, subjectName }) {
   const [selectedVolume, setSelectedVolume] = useState(null);
@@ -280,7 +281,7 @@ function Prompt({ volumes, subjectName }) {
           promptResultRef={promptResultRef}
           subjectName={subjectName}
         />
-        <div style={{ position: 'relative', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        {/* <div style={{ position: 'relative', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <button
             className="copy-button"
             onClick={handleCopy}
@@ -290,7 +291,8 @@ function Prompt({ volumes, subjectName }) {
           {showToast && (
             <div className={`copy-toast${showToast ? ' show' : ''}`}>{toastMsg}</div>
           )}
-        </div>
+        </div> */}
+        <BubbleButton label='複製到剪貼版' buttonColor='#00DDF6' textColor='#0809FFF'/>
       </div>
     </div>
   );

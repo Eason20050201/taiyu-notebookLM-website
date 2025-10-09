@@ -3,6 +3,7 @@ import './Prompt.css';
 
 import React, { useState } from 'react';
 import { templates } from './templates';
+import BubbleButton from './BubbleButton';
 
 function PromptGenerator({
   selectedVolume,
@@ -112,7 +113,9 @@ function PromptGenerator({
           onChange={e => setNote(e.target.value)}
         />
       </div>
-      <button className='generate-button' onClick={generatePrompt}>生成 Prompt</button>
+      {/* <button className='generate-button' onClick={generatePrompt}>生成 Prompt</button> */}
+      <BubbleButton label='生成 prompt' buttonColor='#00DDF6' textColor='#0809FFF' onClick={generatePrompt}/>
+
       <div className='prompt-function'>
         <h3>結果</h3>
         <textarea
