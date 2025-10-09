@@ -13,6 +13,8 @@ const BubbleButton = ({
   const buttonRef = useRef(null);
   const containerRef = useRef(null);
 
+  // 將動畫 timeline 存在 ref
+  const masterTimeline = useRef(null);
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.style.setProperty("--button-color", buttonColor);
@@ -64,13 +66,18 @@ const BubbleButton = ({
       .to(effectButton, { duration: 1.8, scale: 1, ease: "elastic.out(1.2, 0.4)" }, 1.2)
       .timeScale(2.6);
 
-    const handleClickEffect = () => master.restart();
-    button.addEventListener("click", handleClickEffect);
+    masterTimeline.current = master;
+  }, [buttonColor, textColor]);
 
-    return () => {
-      button.removeEventListener("click", handleClickEffect);
-    };
-  }, [buttonColor]);
+  // 合併動畫與 onClick
+  const handleButtonClick = (e) => {
+    if (masterTimeline.current) {
+      masterTimeline.current.restart();
+    }
+    if (onClick) {
+      onClick(e);
+    }
+  };
 
   return (
     <div
@@ -94,7 +101,7 @@ const BubbleButton = ({
       </svg>
 
       <span className="button--bubble__container">
-        <button ref={buttonRef} className="button button--bubble" onClick={onClick}>
+        <button ref={buttonRef} className="button button--bubble" onClick={handleButtonClick}>
           {label}
         </button>
         <span className="button--bubble__effect-container">

@@ -77,18 +77,24 @@ function Prompt({ volumes, subjectName }) {
   const [toastMsg, setToastMsg] = useState('');
   const handleCopy = () => {
     const textarea = promptResultRef.current;
+    console.log('handleCopy called');
     if (textarea && textarea.value) {
+      console.log('textarea value:', textarea.value);
       navigator.clipboard.writeText(textarea.value)
         .then(() => {
+          console.log('複製成功');
           setToastMsg('已複製到剪貼簿!');
           setShowToast(true);
           setTimeout(() => setShowToast(false), 1500);
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log('複製失敗', err);
           setToastMsg('複製失敗');
           setShowToast(true);
           setTimeout(() => setShowToast(false), 1500);
         });
+    } else {
+      console.log('textarea is null or has no value');
     }
   };
 
@@ -292,7 +298,12 @@ function Prompt({ volumes, subjectName }) {
             <div className={`copy-toast${showToast ? ' show' : ''}`}>{toastMsg}</div>
           )}
         </div> */}
-        <BubbleButton label='複製到剪貼版' buttonColor='#00DDF6' textColor='#0809FFF'/>
+        <div style={{ position: 'relative', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <BubbleButton label='複製到剪貼版' buttonColor='#00DDF6' textColor='#0809FFF'onClick={handleCopy} />
+          {showToast && (
+            <div className={`copy-toast${showToast ? ' show' : ''}`}>{toastMsg}</div>
+          )}
+        </div>
       </div>
     </div>
   );

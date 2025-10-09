@@ -172,7 +172,7 @@
 /* 複製提示 toast */
 .copy-toast {
     position: absolute;
-    bottom: 70px;
+    bottom: 90px;
     left: 50%;
     transform: translateX(-50%);
     background: #01B0B0;
