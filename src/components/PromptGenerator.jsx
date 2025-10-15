@@ -15,7 +15,8 @@ function PromptGenerator({
   itemOptions,
   itemDetails = {},
   promptResultRef,
-  subjectName = ''
+  subjectName = '',
+  disableCurriculumFilters = false
 }) {
   const [note, setNote] = useState('');
   const [result, setResult] = useState('');
@@ -29,9 +30,11 @@ function PromptGenerator({
 
   // 組裝 prompt 字串
   const generatePrompt = () => {
-    if (selectedVolume === null || !volumes[selectedVolume]) {
-      setResult('請先選擇「冊次」後再生成 prompt。');
-      return;
+    if (!disableCurriculumFilters) {
+      if (selectedVolume === null || !volumes[selectedVolume]) {
+        setResult('請先選擇「冊次」後再生成 prompt。');
+        return;
+      }
     }
     let prompt = '';
 
@@ -63,7 +66,10 @@ function PromptGenerator({
     });
 
     if (selectedItem) {
-      const item = itemOptions.find(i => i.id === selectedItem)?.title;
+      // 支援子項目：若 selectedItem 是 children 的 id，抓取正確標題
+      const parent = itemOptions.find(i => i.id === selectedItem || (Array.isArray(i.children) && i.children.some(c => c.id === selectedItem)));
+      const child = parent && Array.isArray(parent.children) ? parent.children.find(c => c.id === selectedItem) : null;
+      const item = child?.title || parent?.title;
       if (item) prompt += `項目: ${item}\n\n`;
       // 細項內容
       const detailLines = Object.entries(filledDetails)
@@ -83,26 +89,28 @@ function PromptGenerator({
         prompt += detailLines.join('\n\n') + '\n\n';
       }
     }
-    if (selectedVolume !== null && volumes[selectedVolume]) {
-      prompt += `冊次: ${volumes[selectedVolume].name}\n\n`;
-    }
-    if (selectedChapters.length > 0) {
-      const chapters = selectedChapters.map(idx => volumes[selectedVolume].chapters[idx].name).join(', ');
-      prompt += `章: ${chapters}\n\n`;
-    }
-    if (selectedSections.length > 0) {
-      const sections = selectedSections.map(val => {
-        const [chIdx, secIdx] = val.split('-').map(Number);
-        return volumes[selectedVolume].chapters[chIdx].sections[secIdx].name;
-      }).join(', ');
-      prompt += `節: ${sections}\n\n`;
-    }
-    if (selectedPoints.length > 0) {
-      const points = selectedPoints.map(val => {
-        const [chIdx, secIdx, ptIdx] = val.split('-').map(Number);
-        return volumes[selectedVolume].chapters[chIdx].sections[secIdx].points[ptIdx].name;
-      }).join(', ');
-      prompt += `重點: ${points}\n\n`;
+    if (!disableCurriculumFilters) {
+      if (selectedVolume !== null && volumes[selectedVolume]) {
+        prompt += `冊次: ${volumes[selectedVolume].name}\n\n`;
+      }
+      if (selectedChapters.length > 0) {
+        const chapters = selectedChapters.map(idx => volumes[selectedVolume].chapters[idx].name).join(', ');
+        prompt += `章: ${chapters}\n\n`;
+      }
+      if (selectedSections.length > 0) {
+        const sections = selectedSections.map(val => {
+          const [chIdx, secIdx] = val.split('-').map(Number);
+          return volumes[selectedVolume].chapters[chIdx].sections[secIdx].name;
+        }).join(', ');
+        prompt += `節: ${sections}\n\n`;
+      }
+      if (selectedPoints.length > 0) {
+        const points = selectedPoints.map(val => {
+          const [chIdx, secIdx, ptIdx] = val.split('-').map(Number);
+          return volumes[selectedVolume].chapters[chIdx].sections[secIdx].points[ptIdx].name;
+        }).join(', ');
+        prompt += `重點: ${points}\n\n`;
+      }
     }
     if (note.trim()) {
       prompt += `備註: ${note.trim()}\n\n`;
