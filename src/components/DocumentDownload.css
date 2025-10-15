@@ -48,3 +48,23 @@
     scale: 1.05;
 }
 
+
+/* Phone RWD */
+@media (max-width: 600px) {
+    .document-download {
+        padding: 14px 10px;
+        border-radius: 12px;
+    }
+    .document-download-urls {
+        padding: 12px 10px;
+        max-height: 260px;
+        min-height: 160px;
+        gap: 8px;
+    }
+    .document-download-url {
+        width: 100%;
+        padding: 10px 14px;
+        min-height: 44px;
+    }
+}
+

@@ -110,3 +110,38 @@
         margin-bottom: 6px;
     }
 }
+
+/* Phone-first layout: checkbox + label on one row, input below full width */
+@media (max-width: 600px) {
+    .item-template-title {
+        font-size: 18px;
+        text-align: center;
+    }
+    .item-template-content {
+        display: grid;
+        grid-template-columns: 24px 1fr; /* checkbox + label */
+        grid-template-rows: auto auto;    /* header row + input row */
+        align-items: center;
+        gap: 8px 10px;
+    }
+    .item-template-content input[type="checkbox"] {
+        grid-column: 1 / 2;
+        grid-row: 1;
+        justify-self: start;
+    }
+    .item-template-content h3 {
+        grid-column: 2 / 3;
+        grid-row: 1;
+        margin: 0;
+    }
+    .item-template-content .input-box,
+    .item-template-content .custom-select {
+        grid-column: 1 / -1; /* span both columns */
+        width: 100%;
+        margin: 0;
+    }
+    .input-box {
+        width: 100%;
+        min-height: 100px;
+    }
+}

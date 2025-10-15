@@ -70,3 +70,23 @@
   font-size: 0.85em;
 }
 
+
+/* Phone RWD */
+@media (max-width: 600px) {
+  .notebook {
+    padding: 14px 10px;
+    border-radius: 12px;
+  }
+  .notebook-urls {
+    padding: 12px 10px;
+    max-height: 260px;
+    min-height: 160px;
+    gap: 8px;
+  }
+  .notebook-url {
+    width: 100%;
+    padding: 10px 14px;
+    min-height: 44px;
+  }
+}
+
