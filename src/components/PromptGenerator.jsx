@@ -2,7 +2,7 @@ import './Prompt.css';
 
 
 import React, { useState } from 'react';
-import { templates } from './templates';
+import { templates, promptRule } from './templates';
 import BubbleButton from './BubbleButton';
 
 function PromptGenerator({
@@ -97,9 +97,8 @@ function PromptGenerator({
     if (note.trim()) {
       prompt += `備註: ${note.trim()}\n\n`;
     }
-    // 新增前後固定說明
-    const rule = `規則：\n1. 引用內容時，請標註檔案名稱與章節。\n   - 格式：[《檔案名稱》, 第X章, 第X節]  \n2. 為每個引用的檔案加上可信度標示：高 / 中 / 低  \n   - 高：教材原文、官方課本  \n   - 中：補充教材、教學文件  \n   - 低：網路文章、未經審查資料  \n3. 輸出結構：  \n   - (H1)主要成果:（依據「製作項目」生成）  \n   - (H1)來源:（列出引用章節 + 可信度）  \n   - (H1)備註:（如有矛盾資訊或補充說明）`;
-    setResult(`${prompt.trim()}\n\n${rule}`.trim());
+  // 新增前後固定說明（從 templates 管理的共用文字）
+  setResult(`${prompt.trim()}\n\n${promptRule}`.trim());
   };
 
   return (
