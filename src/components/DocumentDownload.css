@@ -48,9 +48,3 @@
     scale: 1.05;
 }
 
-
-@media (max-width: 800px) {
-    .document-download {
-        width: 100%;
-    }
-}

@@ -61,7 +61,7 @@
 
 /* RWD */
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
     .item-selector-cards {
         flex-direction: column;
         align-items: center;

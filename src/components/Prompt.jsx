@@ -1,5 +1,4 @@
 import './Prompt.css'
-import CustomSelect from './CustomSelect'
 
 import { useState, useRef } from 'react';
 import { itemOptionsMap } from './templates';
@@ -7,6 +6,7 @@ import ItemSelector from './ItemSelector';
 import ItemTemplate from './ItemTemplate';
 import PromptGenerator from './PromptGenerator';
 import BubbleButton from './BubbleButton';
+import CustomSelect from './CustomSelect'
 
 function Prompt({ volumes, subjectName }) {
   const [selectedVolume, setSelectedVolume] = useState(null);

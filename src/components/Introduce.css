@@ -84,7 +84,7 @@
 
 /* RWD */
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .introduce-cards {
     flex-direction: column;
     align-items: center;
