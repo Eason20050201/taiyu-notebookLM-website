@@ -20,6 +20,10 @@ function Prompt({ volumes, subjectName }) {
   // 細項勾選與輸入內容
   const [itemDetails, setItemDetails] = useState({});
 
+  // 是否為高中生涯規劃且選到「升學資訊(2) / 學習歷程(3)」→ 隱藏冊次與章節重點
+  const isCareerPlanning = subjectName === '高中生涯規劃';
+  const hideCurriculumFilters = isCareerPlanning && (selectedItem === 2 || selectedItem === 3);
+
   // 冊次選項
   const volumeOptions = volumes.map((v, idx) => ({ value: idx, label: v.name }));
   // 取得目前選到的冊次物件
@@ -61,8 +65,21 @@ function Prompt({ volumes, subjectName }) {
   // 當切換主項目時，重置細項內容與子項目
   const handleSelectItem = (itemId) => {
     setSelectedItem(itemId);
-    setSelectedSubItem(null);
+    // 先根據欲切換的主項目判斷是否有 children，若有就立即選第一個，避免短暫的 null 狀態造成閃爍
+    const nextMain = (itemOptions || []).find(i => i.id === itemId);
+    const firstChildId = nextMain?.children?.[0]?.id || null;
+    setSelectedSubItem(firstChildId);
     setItemDetails({});
+
+    // 在需要隱藏課程過濾時，清空冊次/章節/重點相關狀態
+    if (subjectName === '高中生涯規劃' && (itemId === 2 || itemId === 3)) {
+      setSelectedVolume(null);
+      setSelectedChapters([]);
+      setSelectedSections([]);
+      setSelectedPoints([]);
+      setExpandedChapters([]);
+      setExpandedSections([]);
+    }
   };
 
   // 當切換子項目時
@@ -135,151 +152,155 @@ function Prompt({ volumes, subjectName }) {
           </div>
         </div>
 
-        <div className='prompt-function'>
-          <h3>冊次</h3>
-          <CustomSelect
-            placeholder="選擇冊次"
-            options={volumeOptions}
-            onChange={option => {
-              setSelectedVolume(option ? option.value : null);
-              setSelectedChapters([]);
-              setSelectedSections([]);
-              setSelectedPoints([]);
-              setExpandedChapters([]);
-              setExpandedSections([]);
-            }}
-            value={volumeOptions.find(opt => opt.value === selectedVolume) || null}
-            isMulti={false}
-          />
-        </div>
-
-        <div className='prompt-function'>
-          <h3>章/節/重點</h3>
-          <div style={{ width: '100%' }}>
-            {currentVolume && currentVolume.chapters.map((ch, chIdx) => (
-              <div key={chIdx} style={{ marginBottom: 6, marginLeft: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  {ch.sections && ch.sections.length > 0 && (
-                    <button
-                      type="button"
-                      style={{
-                        width: 22, height: 22, marginRight: 4, border: 'none', background: 'none', cursor: 'pointer', fontWeight: 'bold', fontSize: 16, color: '#8B00FF',
-                        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                      }}
-                      onClick={() => setExpandedChapters(exp => exp.includes(chIdx) ? exp.filter(i => i !== chIdx) : [...exp, chIdx])}
-                    >
-                      {expandedChapters.includes(chIdx) ? '−' : '+'}
-                    </button>
-                  )}
-                  <label style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}>
-                    <input
-                      type="checkbox"
-                      checked={selectedChapters.includes(chIdx)}
-                      onChange={e => {
-                        let vals = selectedChapters.slice();
-                        if (e.target.checked) {
-                          vals.push(chIdx);
-                          setSelectedChapters(vals);
-                          // 勾選時不清除下層
-                        } else {
-                          vals = vals.filter(v => v !== chIdx);
-                          setSelectedChapters(vals);
-                          // 只在取消勾選時，清除該章下所有節與重點
-                          setSelectedSections(prevSections => prevSections.filter(secVal => {
-                            const [cIdx] = secVal.split('-').map(Number);
-                            return vals.includes(cIdx);
-                          }));
-                          setSelectedPoints(prevPoints => prevPoints.filter(ptVal => {
-                            const [cIdx] = ptVal.split('-').map(Number);
-                            return vals.includes(cIdx);
-                          }));
-                        }
-                      }}
-                    />
-                    <span style={{ marginLeft: 4, fontWeight: 'bold', color: '#8B00FF' }}>{ch.name}</span>
-                  </label>
-                </div>
-                {expandedChapters.includes(chIdx) && (
-                  <div style={{ marginLeft: 32 }}>
-                    {ch.sections.map((sec, secIdx) => {
-                      const secValue = `${chIdx}-${secIdx}`;
-                      return (
-                        <div key={secValue} style={{ marginBottom: 4 }}>
-                          <div style={{ display: 'flex', alignItems: 'center' }}>
-                            {sec.points && sec.points.length > 0 && (
-                              <button
-                                type="button"
-                                style={{
-                                  width: 20, height: 20, marginRight: 4, border: 'none', background: 'none', cursor: 'pointer', fontWeight: 'bold', fontSize: 14, color: '#01B0B0',
-                                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                                }}
-                                onClick={() => setExpandedSections(exp => exp.includes(secValue) ? exp.filter(i => i !== secValue) : [...exp, secValue])}
-                              >
-                                {expandedSections.includes(secValue) ? '−' : '+'}
-                              </button>
-                            )}
-                            <label style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}>
-                              <input
-                                type="checkbox"
-                                checked={selectedSections.includes(secValue)}
-                                onChange={e => {
-                                  let vals = selectedSections.slice();
-                                  if (e.target.checked) {
-                                    vals.push(secValue);
-                                    setSelectedSections(vals);
-                                    // 勾選時不清除下層
-                                  } else {
-                                    vals = vals.filter(v => v !== secValue);
-                                    setSelectedSections(vals);
-                                    // 只在取消勾選時，清除該節下所有重點
-                                    setSelectedPoints(prevPoints => prevPoints.filter(ptVal => {
-                                      const [cIdx, sIdx] = ptVal.split('-').map(Number);
-                                      return vals.includes(`${cIdx}-${sIdx}`);
-                                    }));
-                                  }
-                                }}
-                              />
-                              <span style={{ marginLeft: 4, color: '#01B0B0', fontWeight: 500 }}>{sec.name}</span>
-                            </label>
-                          </div>
-                          {expandedSections.includes(secValue) && (
-                            <div style={{ marginLeft: 32, display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-                              {sec.points.map((pt, ptIdx) => {
-                                const ptValue = `${chIdx}-${secIdx}-${ptIdx}`;
-                                return (
-                                  <label key={ptValue} style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}>
-                                    <input
-                                      type="checkbox"
-                                      checked={selectedPoints.includes(ptValue)}
-                                      onChange={e => {
-                                        let vals = selectedPoints.slice();
-                                        if (e.target.checked) vals.push(ptValue);
-                                        else vals = vals.filter(v => v !== ptValue);
-                                        setSelectedPoints(vals);
-                                      }}
-                                    />
-                                    <span style={{ marginLeft: 4 }}>{pt.name}</span>
-                                  </label>
-                                );
-                              })}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            ))}
+        {!hideCurriculumFilters && (
+          <div className='prompt-function'>
+            <h3>冊次</h3>
+            <CustomSelect
+              placeholder="選擇冊次"
+              options={volumeOptions}
+              onChange={option => {
+                setSelectedVolume(option ? option.value : null);
+                setSelectedChapters([]);
+                setSelectedSections([]);
+                setSelectedPoints([]);
+                setExpandedChapters([]);
+                setExpandedSections([]);
+              }}
+              value={volumeOptions.find(opt => opt.value === selectedVolume) || null}
+              isMulti={false}
+            />
           </div>
-        </div>
+        )}
+
+        {!hideCurriculumFilters && (
+          <div className='prompt-function'>
+            <h3>章/節/重點</h3>
+            <div style={{ width: '100%' }}>
+              {currentVolume && currentVolume.chapters.map((ch, chIdx) => (
+                <div key={chIdx} style={{ marginBottom: 6, marginLeft: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    {ch.sections && ch.sections.length > 0 && (
+                      <button
+                        type="button"
+                        style={{
+                          width: 22, height: 22, marginRight: 4, border: 'none', background: 'none', cursor: 'pointer', fontWeight: 'bold', fontSize: 16, color: '#8B00FF',
+                          display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                        }}
+                        onClick={() => setExpandedChapters(exp => exp.includes(chIdx) ? exp.filter(i => i !== chIdx) : [...exp, chIdx])}
+                      >
+                        {expandedChapters.includes(chIdx) ? '−' : '+'}
+                      </button>
+                    )}
+                    <label style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}>
+                      <input
+                        type="checkbox"
+                        checked={selectedChapters.includes(chIdx)}
+                        onChange={e => {
+                          let vals = selectedChapters.slice();
+                          if (e.target.checked) {
+                            vals.push(chIdx);
+                            setSelectedChapters(vals);
+                            // 勾選時不清除下層
+                          } else {
+                            vals = vals.filter(v => v !== chIdx);
+                            setSelectedChapters(vals);
+                            // 只在取消勾選時，清除該章下所有節與重點
+                            setSelectedSections(prevSections => prevSections.filter(secVal => {
+                              const [cIdx] = secVal.split('-').map(Number);
+                              return vals.includes(cIdx);
+                            }));
+                            setSelectedPoints(prevPoints => prevPoints.filter(ptVal => {
+                              const [cIdx] = ptVal.split('-').map(Number);
+                              return vals.includes(cIdx);
+                            }));
+                          }
+                        }}
+                      />
+                      <span style={{ marginLeft: 4, fontWeight: 'bold', color: '#8B00FF' }}>{ch.name}</span>
+                    </label>
+                  </div>
+                  {expandedChapters.includes(chIdx) && (
+                    <div style={{ marginLeft: 32 }}>
+                      {ch.sections.map((sec, secIdx) => {
+                        const secValue = `${chIdx}-${secIdx}`;
+                        return (
+                          <div key={secValue} style={{ marginBottom: 4 }}>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                              {sec.points && sec.points.length > 0 && (
+                                <button
+                                  type="button"
+                                  style={{
+                                    width: 20, height: 20, marginRight: 4, border: 'none', background: 'none', cursor: 'pointer', fontWeight: 'bold', fontSize: 14, color: '#01B0B0',
+                                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                                  }}
+                                  onClick={() => setExpandedSections(exp => exp.includes(secValue) ? exp.filter(i => i !== secValue) : [...exp, secValue])}
+                                >
+                                  {expandedSections.includes(secValue) ? '−' : '+'}
+                                </button>
+                              )}
+                              <label style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}>
+                                <input
+                                  type="checkbox"
+                                  checked={selectedSections.includes(secValue)}
+                                  onChange={e => {
+                                    let vals = selectedSections.slice();
+                                    if (e.target.checked) {
+                                      vals.push(secValue);
+                                      setSelectedSections(vals);
+                                      // 勾選時不清除下層
+                                    } else {
+                                      vals = vals.filter(v => v !== secValue);
+                                      setSelectedSections(vals);
+                                      // 只在取消勾選時，清除該節下所有重點
+                                      setSelectedPoints(prevPoints => prevPoints.filter(ptVal => {
+                                        const [cIdx, sIdx] = ptVal.split('-').map(Number);
+                                        return vals.includes(`${cIdx}-${sIdx}`);
+                                      }));
+                                    }
+                                  }}
+                                />
+                                <span style={{ marginLeft: 4, color: '#01B0B0', fontWeight: 500 }}>{sec.name}</span>
+                              </label>
+                            </div>
+                            {expandedSections.includes(secValue) && (
+                              <div style={{ marginLeft: 32, display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                                {sec.points.map((pt, ptIdx) => {
+                                  const ptValue = `${chIdx}-${secIdx}-${ptIdx}`;
+                                  return (
+                                    <label key={ptValue} style={{ display: 'flex', alignItems: 'center', marginRight: 10 }}>
+                                      <input
+                                        type="checkbox"
+                                        checked={selectedPoints.includes(ptValue)}
+                                        onChange={e => {
+                                          let vals = selectedPoints.slice();
+                                          if (e.target.checked) vals.push(ptValue);
+                                          else vals = vals.filter(v => v !== ptValue);
+                                          setSelectedPoints(vals);
+                                        }}
+                                      />
+                                      <span style={{ marginLeft: 4 }}>{pt.name}</span>
+                                    </label>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* PromptGenerator 負責備註、生成、結果區塊 */}
         <PromptGenerator
-          selectedVolume={selectedVolume}
-          selectedChapters={selectedChapters}
-          selectedSections={selectedSections}
-          selectedPoints={selectedPoints}
+          selectedVolume={hideCurriculumFilters ? null : selectedVolume}
+          selectedChapters={hideCurriculumFilters ? [] : selectedChapters}
+          selectedSections={hideCurriculumFilters ? [] : selectedSections}
+          selectedPoints={hideCurriculumFilters ? [] : selectedPoints}
           selectedItem={selectedSubItem || selectedItem}
           volumes={volumes}
           itemOptions={itemOptions}
