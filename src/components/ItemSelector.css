@@ -10,6 +10,7 @@
     justify-content: space-between;
     align-items: center;
     position: relative;
+    width: 100%;
 }
 
 .item-selector-highlight {
@@ -23,6 +24,7 @@
     transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1), width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
                 top 0.4s cubic-bezier(0.4, 0, 0.2, 1), height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 0;
+    pointer-events: none; /* 避免遮到點擊 */
 }
 
 .item-selector-card {
@@ -76,5 +78,6 @@
     .item-selector-highlight {
         width: 80% !important;
         left: 10% !important;
+        height: auto; /* 改由 JS 設定高度 */
     }
 }

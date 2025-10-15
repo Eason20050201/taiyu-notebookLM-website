@@ -54,7 +54,7 @@ function PromptGenerator({
     // 先補齊預設值
     const filledDetails = { ...itemDetails };
     Object.entries(filledDetails).forEach(([label, obj]) => {
-      if (obj && obj.checked && (!obj.value || obj.value.trim() === '')) {
+      if (obj && obj.checked && (obj.value === undefined || obj.value === null || (typeof obj.value === 'string' && obj.value.trim() === ''))) {
         filledDetails[label] = {
           ...obj,
           value: getPlaceholder(label)
@@ -67,8 +67,18 @@ function PromptGenerator({
       if (item) prompt += `項目: ${item}\n\n`;
       // 細項內容
       const detailLines = Object.entries(filledDetails)
-        .filter(([label, obj]) => obj && obj.checked && obj.value && obj.value.trim() !== '')
-        .map(([label, obj]) => `${label}: ${obj.value}`);
+        .filter(([label, obj]) => obj && obj.checked && obj.value && (typeof obj.value === 'object' || (typeof obj.value === 'string' && obj.value.trim() !== '')))
+        .map(([label, obj]) => {
+          if (typeof obj.value === 'object') {
+            // subjectScores: print as 國:xx, 英:yy ...
+            const pairs = Object.entries(obj.value)
+              .filter(([, v]) => v !== undefined && v !== null && String(v).trim() !== '')
+              .map(([k, v]) => `${k}:${v}`)
+              .join(', ');
+            return `${label}: ${pairs}`;
+          }
+          return `${label}: ${obj.value}`;
+        });
       if (detailLines.length > 0) {
         prompt += detailLines.join('\n\n') + '\n\n';
       }

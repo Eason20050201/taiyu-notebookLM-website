@@ -86,6 +86,7 @@ export const templates = {
       { label: '教學對象', placeholder: 'ex: 高中一年級學生' },
       { label: '教學時長', placeholder: 'ex: 2 節課(共 100 分鐘)' },
       { label: '分組方式', placeholder: '單人', options: ['單人', '多人'] },
+      { label: '評分方式', placeholder: '投票表決', options: ['投票表決', '老師評分', '組內互評'] },
       { label: '活動時間', placeholder: 'ex: 30分鐘' },
       { label: '具體內容與限制', placeholder: 
 `ex: 角色與任務：請扮演一位經驗豐富的生涯輔導教師，根據我上傳的文件，設計一堂 50 分鐘的團體輔導\
@@ -117,7 +118,7 @@ export const templates = {
       { label: '題目生成方式', placeholder: '文字檔(列印輸出)', options: ['文字檔(列印輸出)', 'Kahoot', 'Quizizz']},
     ],
     '2-1': [
-      { label: '角色', placeholder: 'ex: 你是一名專業的{地理}科大學教授。' },
+      { label: '學群選擇', placeholder: '資訊', options: ['資訊', '工程', '數理化', '醫藥衛生', '生命科學', '生物資源', '地球與環境', '建築與設計', '藝術', '社會與心理', '大眾傳播', '外語', '文史哲', '教育', '法政', '管理', '財經', '遊憩與運動'] },
       { label: '背景', placeholder: 'ex: 現在有一名普通高中的學生與你進行面試。' },
       { label: '參考資料', placeholder: 'ex: 面試考古題題目、學習歷程自述、多元綜整心得等。' },
       { label: '具體內容與限制', placeholder: 
@@ -127,7 +128,7 @@ export const templates = {
     '2-2': [
       { label: '角色', placeholder: 'ex: 你是一名專業的生涯指引的教學專家。' },
       { label: '背景', placeholder: 'ex: 你的學生是高中一年級，目前對於未來的學群的選擇毫無頭緒。' },
-      { label: '參考資料', placeholder: 'ex: 興趣測驗、性向測驗、霍蘭德測驗、大考中心簡章等等' },
+      { label: '參考資料', placeholder: '興趣測驗', options: ['性向測驗', '興趣測驗', '霍蘭德測驗', '其他'] },
       { label: '具體內容與限制', placeholder: 
 `ex: 請根據我上傳的資料，針對學生的各項測驗進行分析，分析的目的主要是需要提供給學生選擇學群的建議。\
 分析的結果需要包含  
@@ -139,6 +140,7 @@ export const templates = {
       { label: '角色', placeholder: 'ex: 你是一名專業的生涯指引的教學專家。' },
       { label: '背景', placeholder: 'ex: 你的學生是高中三年級，目前學測成績已經出爐，正在煩惱要挑選什麼學校與科系。' },
       { label: '參考資料', placeholder: 'ex: 近3年來各校系錄取成績、學生學測成績、高一興趣量表測驗結果（學群建議）' },
+  { label: '學測成績', type: 'subjectScores', subjects: ['國', '英', '數A', '數B', '自', '社'], placeholder: '無' },
       { label: '具體內容與限制', placeholder: 
 `請根據我上傳的資料，透過學生學測的成績來核對近3年來各校系公告的錄取成績進行落點比對，其中還需要結合學生興趣量表的結果進行篩選，列出最優先適合的 6 個志願排序。\
 其中需要呈現的資料包含
@@ -159,9 +161,10 @@ export const templates = {
     '3-2': [
       { label: '角色', placeholder: 'ex: 你是一名專業的{地理}科大學教授。' },
       { label: '背景', placeholder: 'ex: 現在有一名學生的學習歷程檔案上傳給你閱覽。' },
+      { label: '學群選擇', placeholder: '資訊', options: ['資訊', '工程', '數理化', '醫藥衛生', '生命科學', '生物資源', '地球與環境', '建築與設計', '藝術', '社會與心理', '大眾傳播', '外語', '文史哲', '教育', '法政', '管理', '財經', '遊憩與運動'] },
       { label: '參考資料', placeholder: 'ex: 學生的學習歷程檔案、教授會在意的觀點。' },
       { label: '具體內容與限制', placeholder: 
-`ex: 請根據我上傳的資料，依照你教授的視角與參考評量的重點去分析這位學生的「****」學習歷程檔案，\
+`ex: 請根據我上傳的資料「請修改為您的檔案名稱」，依照你教授的視角與參考評量的重點去分析這位學生的學習歷程檔案，\
 其中分析的內容包含 
 1. 具有吸引力的地方  
 2. 不具有吸引力的 

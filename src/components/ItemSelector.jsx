@@ -6,8 +6,8 @@ function ItemSelector({ items, selectedItem, setSelectedItem }) {
   const containerRef = useRef(null);
   const [highlightStyle, setHighlightStyle] = useState({ left: 0, width: 0, top: 0, height: 0 });
 
-  // 判斷是否為 RWD (max-width: 900px)
-  const isMobile = () => window.innerWidth <= 900;
+  // 判斷是否為 RWD，需與 CSS 的 @media (max-width: 1024px) 保持一致
+  const isMobile = () => window.matchMedia('(max-width: 1024px)').matches;
 
   // 預設選第一個
   useEffect(() => {
@@ -27,16 +27,16 @@ function ItemSelector({ items, selectedItem, setSelectedItem }) {
         const containerRect = container.getBoundingClientRect();
         if (isMobile()) {
           setHighlightStyle({
-            top: cardRect.top - containerRect.top,
-            height: cardRect.height
+            top: Math.round(cardRect.top - containerRect.top),
+            height: Math.round(cardRect.height)
             // width/left 由 CSS 控制
           });
         } else {
           setHighlightStyle({
-            left: cardRect.left - containerRect.left,
-            width: cardRect.width,
+            left: Math.round(cardRect.left - containerRect.left),
+            width: Math.round(cardRect.width),
             top: 0,
-            height: containerRect.height,
+            height: Math.round(containerRect.height),
           });
         }
       }

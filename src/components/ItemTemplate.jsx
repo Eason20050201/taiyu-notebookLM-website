@@ -30,6 +30,20 @@ function ItemTemplate({ selectedItem, itemDetails, setItemDetails, subjectName =
     }));
   };
 
+  // 科目成績（物件）輸入：value 結構 { '國': '14', '英': '13', ... }
+  const handleSubjectScore = (label, subject, value) => {
+    setItemDetails(prev => ({
+      ...prev,
+      [label]: {
+        ...prev[label],
+        value: {
+          ...(typeof prev[label]?.value === 'object' && prev[label]?.value ? prev[label].value : {}),
+          [subject]: value
+        }
+      }
+    }));
+  };
+
   // 取得已替換 subjectName 的 placeholder
   const getPlaceholder = (ph) => {
     if (!ph) return '';
@@ -49,7 +63,24 @@ function ItemTemplate({ selectedItem, itemDetails, setItemDetails, subjectName =
             onChange={e => handleCheck(field.label, e.target.checked)}
           />
           <h3>{field.label}</h3>
-          {field.options ? (
+          {field.type === 'subjectScores' ? (
+            <div className="subject-scores">
+              {Array.isArray(field.subjects) && field.subjects.map((subj) => (
+                <label className="subject-score-item" key={subj}>
+                  <span className="subject-score-label">{subj}</span>
+                  <input
+                    className="subject-score-input"
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="-"
+                    value={(itemDetails?.[field.label]?.value || {})[subj] || ''}
+                    onChange={e => handleSubjectScore(field.label, subj, e.target.value)}
+                    disabled={!itemDetails?.[field.label]?.checked}
+                  />
+                </label>
+              ))}
+            </div>
+          ) : field.options ? (
             <CustomSelect
               options={field.options.map(opt => ({ label: opt, value: opt }))}
               placeholder={getPlaceholder(field.placeholder)}

@@ -85,6 +85,57 @@
     outline: none;
 }
 
+/* Subject scores inline inputs */
+.subject-scores {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    grid-auto-flow: row dense;
+    gap: 15px;
+    max-width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+}
+.subject-score-item {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    justify-self: center;
+    background: #FFFAED;
+    border: 1px solid #FFBF00;
+    border-radius: 12px;
+    padding: 8px 10px;
+}
+.subject-score-label {
+    font-weight: 700;
+    width: 2.4em;            /* 固定寬避免換行 */
+    text-align: center;
+    white-space: nowrap;      /* 不讓「數A」斷行 */
+}
+.subject-score-input {
+    width: 60%;              /* 讓輸入格填滿 pill 剩餘空間 */
+    height: 34px;
+    padding: 4px 8px;
+    border: 1px solid #FFBF00;
+    border-radius: 8px;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.subject-score-input:focus,
+.subject-score-input:focus {
+    box-shadow: 0 2px 8px rgba(255, 215, 79, 0.25);
+    border: 2px solid #EF9B0F;
+    outline: none;
+}
+
+.subject-score-input:disabled {
+    background: #f2f2f2;
+}
+
 @media (max-width: 1024px) {
     .item-template {
         width: 100%;
@@ -108,6 +159,17 @@
         text-align: left;
         white-space: normal;
         margin-bottom: 6px;
+    }
+
+    .subject-scores {
+        gap: 10px;
+        max-width: 340px;
+        margin-left: auto;
+        margin-right: auto;
+        justify-content: center;
+    }
+    .subject-score-item {
+        justify-self: center;
     }
 }
 
@@ -135,7 +197,8 @@
         margin: 0;
     }
     .item-template-content .input-box,
-    .item-template-content .custom-select {
+    .item-template-content .custom-select,
+    .item-template-content .subject-scores {
         grid-column: 1 / -1; /* span both columns */
         width: 100%;
         margin: 0;
@@ -143,5 +206,26 @@
     .input-box {
         width: 100%;
         min-height: 100px;
+    }
+    .subject-scores {
+        gap: 8px;
+        max-width: 220px;
+        margin-left: auto;
+        margin-right: auto;
+        justify-content: center;
+    }
+    .subject-score-item {
+        padding: 8px;
+        gap: 6px;
+        justify-self: center;
+    }
+    .subject-score-label {
+        width: 2.2em;
+        font-weight: 600;
+    }
+    .subject-score-input {
+        width: 100%;       
+        height: 36px;
+        font-size: 1rem;
     }
 }
