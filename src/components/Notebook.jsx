@@ -39,8 +39,8 @@ function Notebook({ volumes = [] }) {
   return (
     <div className="notebook">
       <div className='notebook-title'>
-        <h2>想開啟你的 NotebookLM 筆記本？</h2>
-        <h2>這裡幫你快速連結！</h2>
+        <h2>~~馬上啟動泰宇翔宇AI資料庫~~</h2>
+        <h2>這裡幫你快速連結!</h2>
       </div>
       <div className='notebook-urls'>
         {volumes.filter(v => v.notebookUrl).map((v, idx) => {
