@@ -40,7 +40,7 @@ function Notebook({ volumes = [] }) {
     <div className="notebook">
       <div className='notebook-title'>
         <h2>~~馬上啟動泰宇翔宇AI資料庫~~</h2>
-        <h2>這裡幫你快速連結!</h2>
+        <h2>這裡幫你快速連結</h2>
       </div>
       <div className='notebook-urls'>
         {volumes.filter(v => v.notebookUrl).map((v, idx) => {
